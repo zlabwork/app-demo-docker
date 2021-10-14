@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  web:
+    container_name: app-web
+    image: nginx:1.21
+    restart: always
+    volumes:
+      - ./docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
+      - .:/var/www
+    depends_on:
+      - "php"
+    links:
+      - php
+    ports:
+      - "${APP_PORT}:8080"
+    networks:
+      - appnet
+
+  php:
+    container_name: app-php
+    image: php:8.0-fpm-alpine
+    volumes:
+      - .:/var/www
+    ports:
+      - "9000"
+    networks:
+      - appnet
+
+  db:
+    container_name: app-db
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./schema:/docker-entrypoint-initdb.d
+      #- ./var/my/data:/var/lib/mysql
+    ports:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    name: appnet
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
