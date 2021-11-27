@@ -5,14 +5,15 @@ services:
   gitlab:
     image: 'gitlab/gitlab-ee:14.4.1-ee.0'
     restart: always
-    container_name: app-gitlab
+    container_name: gitlab
     hostname: 'gitlab.example.com'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://gitlab.example.com'
+        gitlab_rails['gitlab_shell_ssh_port'] = 1022
         # Add any other gitlab.rb configuration here, each on its own line
     ports:
-      - '22:22'
+      - '1022:22'
       - '80:80'
       - '443:443'
     volumes:
