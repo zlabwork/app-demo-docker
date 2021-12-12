@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  # https://hub.docker.com/_/postgres
+  postgres:
+    container_name: postgres
+    image: postgres:14.1-bullseye
+    restart: always
+    volumes:
+      - ./schema:/docker-entrypoint-initdb.d
+      #- ./var/my/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      # POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    name: appnet
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
