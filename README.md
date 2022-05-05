@@ -2,6 +2,7 @@
 ```bash
 docker-compose up -d
 docker-compose down
+docker-compose -f docker-compose.yaml up -d
 ```
 
 
