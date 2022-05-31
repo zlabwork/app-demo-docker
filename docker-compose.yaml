@@ -1,12 +1,12 @@
 version: "3.9"
 
 services:
-  web:
-    container_name: app-web
+  nginx:
+    container_name: app-nginx
     image: nginx:1.21
     restart: always
     volumes:
-      - ./docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
+      - ./.docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
       - .:/app
     depends_on:
       - "php"
@@ -27,8 +27,8 @@ services:
     networks:
       - appnet
 
-  db:
-    container_name: app-db
+  mysql:
+    container_name: app-mysql
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     restart: always
