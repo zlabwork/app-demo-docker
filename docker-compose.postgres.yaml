@@ -4,17 +4,17 @@ services:
   # https://hub.docker.com/_/postgres
   postgres:
     container_name: postgres
-    image: postgres:14.1-bullseye
+    image: postgres:${POSTGRES_VERSION:-15.1}-alpine
     restart: always
     volumes:
       - ./schema:/docker-entrypoint-initdb.d
-      #- ./var/my/data:/var/lib/postgresql/data
+      #- ./var/db-postgres:/var/lib/postgresql/data:rw
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER:-dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_DB: ${POSTGRES_DB:-app}
       # POSTGRES_HOST_AUTH_METHOD: trust
     networks:
       - appnet

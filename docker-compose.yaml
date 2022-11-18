@@ -3,7 +3,7 @@ version: "3.9"
 services:
   nginx:
     container_name: app-nginx
-    image: nginx:1.21
+    image: nginx:1.23
     restart: always
     volumes:
       - ./.docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
@@ -13,19 +13,29 @@ services:
     links:
       - php
     ports:
-      - "${APP_PORT}:8080"
+      - "${APP_PORT:-8000}:8080"
     networks:
       - appnet
 
   php:
     container_name: app-php
-    image: php:8.0-fpm-alpine
+    image: php:8.1.12-fpm-alpine
     volumes:
       - .:/app
     ports:
       - "9000"
     networks:
       - appnet
+
+  composer:
+    container_name: app-composer
+    image: composer:2.4
+    command: composer update
+    volumes:
+      - $PWD:/app
+      - $SSH_AUTH_SOCK:/ssh-auth.sock
+    environment:
+      SSH_AUTH_SOCK: /ssh-auth.sock
 
   mysql:
     container_name: app-mysql
@@ -34,14 +44,14 @@ services:
     restart: always
     volumes:
       - ./schema:/docker-entrypoint-initdb.d
-      #- ./var/my/data:/var/lib/mysql
+      #- ./var/db-mysql:/var/lib/mysql
     ports:
       - "3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USER:-dev}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!ChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!ChangeMe!}
     networks:
       - appnet
 
