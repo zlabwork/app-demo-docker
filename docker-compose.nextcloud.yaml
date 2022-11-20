@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  nextcloud:
+    image: nextcloud:23
+    container_name: nc-nextcloud
+    ports:
+      - "${APP_PORT:-8000}:80"
+    links:
+      - mysql
+    volumes:
+      - ./app:/var/www/html
+      - ./data:/var/www/html/data
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USER:-dev}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!Secret!}
+      MYSQL_HOST: mysql
+      NEXTCLOUD_ADMIN_USER: root
+      NEXTCLOUD_ADMIN_PASSWORD: root
+    networks:
+      - appnet
+
+  mysql:
+    image: mysql:8.0
+    container_name: nc-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./schema:/docker-entrypoint-initdb.d
+      - ./database:/var/lib/mysql
+    ports:
+      - "3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USER:-dev}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!Secret!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!Secret!}
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    name: appnet
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
