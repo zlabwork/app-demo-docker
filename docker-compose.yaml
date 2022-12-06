@@ -6,7 +6,7 @@ services:
     image: nginx:1.23
     restart: always
     volumes:
-      - ./.docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
+      - ./docs/docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
       - .:/app
     depends_on:
       - "php"
