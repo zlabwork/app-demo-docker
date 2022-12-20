@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  nginx:
+    container_name: app-nginx
+    image: nginx:${NGINX_VERSION:-1.23}
+    volumes:
+      - ./docs/docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
+      - .:/app
+    depends_on:
+      - "php"
+    links:
+      - php
+    ports:
+      - "${APP_PORT:-8000}:8080"
+    networks:
+      - appnet
+
+  php:
+    container_name: app-php
+    build:
+      context: ./
+      dockerfile: Dockerfile-php
+    image: php:custom
+    volumes:
+      - .:/app
+    ports:
+      - "9000"
+    networks:
+      - appnet
+
+  composer:
+    container_name: app-composer
+    image: composer:2.4
+    command: composer update
+    volumes:
+      - $PWD:/app
+      - $SSH_AUTH_SOCK:/ssh-auth.sock
+    environment:
+      SSH_AUTH_SOCK: /ssh-auth.sock
+
+  postgres:
+    container_name: app-postgres
+    image: postgres:${POSTGRES_VERSION:-15}-alpine
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_USER: ${POSTGRES_USER:-dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+    volumes:
+      - ./schema:/docker-entrypoint-initdb.d
+      - ./var/db-postgres:/var/lib/postgresql/data:rw
+      #- db-data:/var/lib/postgresql/data:rw
+    networks:
+      - appnet
+
+  adminer:
+    container_name: app-adminer
+    image: adminer:4.8.1
+    ports:
+      - "4000:8080"
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    name: appnet
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
+
+volumes:
+  db-data:
