@@ -13,8 +13,30 @@ docker-compose logs -f --tail 5
 ```
 
 
+## tools
+```bash
+apt install net-tools iputils-ping
+```
+
+
+## install php ext in php:8.1.12-fpm-alpine
+```shell
+# connect to the container
+docker exec -it app-php sh
+```
+```shell
+# execute in the container
+apk add libpq-dev \
+&& docker-php-ext-install -j$(nproc) pdo_pgsql pdo_mysql exif gd intl soap
+```
+```shell
+# restart the container
+docker restart app-php
+```
+
+
 ## docker-compose docs
-https://github.com/compose-spec/compose-spec/blob/master/spec.md
+https://github.com/compose-spec/compose-spec/blob/master/spec.md  
 https://docs.docker.com/samples/wordpress/  
 https://docs.docker.com/compose/  
 
