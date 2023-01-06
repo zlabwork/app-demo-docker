@@ -1,4 +1,4 @@
-## start & stop
+## Start & stop
 ```bash
 docker-compose up -d
 docker-compose down
@@ -6,20 +6,20 @@ docker-compose -f docker-compose.yaml up -d
 ```
 
 
-## logs
+## Logs
 ```bash
 docker logs app-web -f --tail 5
 docker-compose logs -f --tail 5
 ```
 
 
-## tools
+## Tools
 ```bash
 apt install net-tools iputils-ping
 ```
 
 
-## install php ext in php:8.1.12-fpm-alpine
+## Install php ext in php:8.1.12-fpm-alpine
 ```shell
 # connect to the container
 docker exec -it app-php sh
@@ -34,14 +34,26 @@ apk add libpq-dev \
 docker restart app-php
 ```
 
+## Elasticsearch for dev env
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-file
+```shell
+docker run --name es01 -p 9200:9200 -p 9300:9300 \
+    -e "discovery.type=single-node" \
+    -e "xpack.security.enabled=false" \
+    -e "xpack.security.http.ssl.enabled=false" \
+    -it elasticsearch:8.5.3
+```
+```shell
+curl -XGET 'http://localhost:9200/' -H 'Content-Type: application/json'
+```
 
-## docker-compose docs
+## Docker-compose docs
 https://github.com/compose-spec/compose-spec/blob/master/spec.md  
 https://docs.docker.com/samples/wordpress/  
 https://docs.docker.com/compose/  
 
 
-## nginx 参考
+## Nginx 参考
 https://symfony.com/doc/current/setup/web_server_configuration.html#nginx  
 https://laravel.com/docs/8.x/deployment#nginx  
 https://docs.nextcloud.com/server/latest/admin_manual/installation/nginx.html?highlight=nginx  
