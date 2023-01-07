@@ -1,6 +1,7 @@
 version: "3.9"
 
-# https://www.elastic.co/guide/en/elasticsearch/reference/8.5/docker.html#docker-compose-file
+# @docs https://www.elastic.co/guide/en/elasticsearch/reference/8.5/docker.html#docker-compose-file
+# @docs https://blog.51cto.com/u_15127525/4295100
 # Kibana web login user is elastic, kibana_system is a user that is internal to Kibana
 services:
   setup:
