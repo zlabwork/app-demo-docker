@@ -1,6 +1,7 @@
 version: "3.9"
 
 # https://www.elastic.co/guide/en/elasticsearch/reference/8.5/docker.html#docker-compose-file
+# Kibana web login user is elastic, kibana_system is a user that is internal to Kibana
 services:
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION:-8.5.3}
@@ -70,7 +71,7 @@ services:
       - discovery.type=single-node # mark
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
-      - xpack.security.enabled=true
+      - xpack.security.enabled=true # false if just test ES without security
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=certs/es01/es01.key
       - xpack.security.http.ssl.certificate=certs/es01/es01.crt
