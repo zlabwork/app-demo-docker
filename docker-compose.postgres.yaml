@@ -6,14 +6,15 @@ services:
     container_name: postgres
     image: postgres:${POSTGRES_VERSION:-15.1}-alpine
     restart: always
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - ./schema:/docker-entrypoint-initdb.d
-      #- ./var/db-postgres:/var/lib/postgresql/data:rw
-    ports:
-      - "5432:5432"
+      - ./database:/var/lib/postgresql/data:rw
+      #- db-postgres:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-dev}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!Secret!}
       POSTGRES_DB: ${POSTGRES_DB:-app}
       # POSTGRES_HOST_AUTH_METHOD: trust
     networks:
@@ -26,3 +27,6 @@ networks:
     ipam:
       config:
         - subnet: 10.0.0.0/16
+
+volumes:
+  db-postgres:

@@ -4,7 +4,6 @@ services:
   nginx:
     container_name: app-nginx
     image: nginx:1.23
-    restart: always
     volumes:
       - ./docs/docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
       - .:/app
@@ -50,8 +49,8 @@ services:
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
       MYSQL_USER: ${MYSQL_USER:-dev}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!ChangeMe!}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!ChangeMe!}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!Secret!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!Secret!}
     networks:
       - appnet
 
