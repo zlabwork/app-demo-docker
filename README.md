@@ -47,6 +47,29 @@ docker run --name es01 -p 9200:9200 -p 9300:9300 \
 curl -XGET 'http://localhost:9200/' -H 'Content-Type: application/json'
 ```
 
+## Elasticsearch xpack (https request)
+https://www.elastic.co/cn/blog/elasticsearch-security-configure-tls-ssl-pki-authentication
+```sh
+# Generate /usr/share/elasticsearch/elastic-stack-ca.p12
+elasticsearch-certutil ca
+
+# Generate client.p12
+elasticsearch-certutil cert --ca ./elastic-stack-ca.p12 -name "CN=something,OU=Consulting Team,DC=mydomain,DC=com"
+
+# Private Key
+openssl pkcs12 -in client.p12 -nocerts -nodes > client.key
+
+# Public Certificate
+openssl pkcs12 -in client.p12 -clcerts -nokeys  > client.cer
+
+# CA Certificate
+openssl pkcs12 -in client.p12 -cacerts -nokeys -chain > client-ca.cer
+
+# Test
+curl https://localhost:9200/_xpack/security/_authenticate?pretty \
+--key client.key --cert client.cer --cacert client-ca.cer -k -v
+```
+
 ## Docker-compose docs
 https://github.com/compose-spec/compose-spec/blob/master/spec.md  
 https://docs.docker.com/samples/wordpress/  
