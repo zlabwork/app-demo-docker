@@ -68,6 +68,9 @@ openssl pkcs12 -in client.p12 -cacerts -nokeys -chain > client-ca.cer
 # Test
 curl https://localhost:9200/_xpack/security/_authenticate?pretty \
 --key client.key --cert client.cer --cacert client-ca.cer -k -v
+
+curl --user elastic:password https://localhost:9200 \
+--key client.key --cert client.cer --cacert client-ca.cer -k -v
 ```
 
 ## Docker-compose docs
