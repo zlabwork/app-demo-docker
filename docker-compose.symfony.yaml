@@ -18,7 +18,10 @@ services:
 
   php:
     container_name: app-php
-    image: php:${PHP_VERSION:-8.1.12}-fpm-alpine
+    build:
+      context: ./
+      dockerfile: Dockerfile-php
+    image: php:custom
     volumes:
       - .:/app
     ports:
