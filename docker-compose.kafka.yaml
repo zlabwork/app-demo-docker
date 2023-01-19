@@ -8,17 +8,18 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
   kafka:
     # docs https://hub.docker.com/r/bitnami/kafka
+    # docs https://juejin.cn/post/6893410969611927566
     image: 'bitnami/kafka:latest'
     ports:
       - '9092:9092'
-      - '9093:9093'
+      - '19092:19092'
     environment:
       - KAFKA_BROKER_ID=1
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://127.0.0.1:9092,EXTERNAL://192.168.0.3:9093
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:19092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://127.0.0.1:9092,EXTERNAL://external_host_address:19092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181/kafka_cluster
+      - ALLOW_PLAINTEXT_LISTENER=yes # not recommended for production
     depends_on:
       - zookeeper
