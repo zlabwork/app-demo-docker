@@ -2,24 +2,40 @@ version: "3"
 services:
   zookeeper:
     image: 'zookeeper:latest'
-    ports:
-      - '2181:2181'
+    expose:
+      - '2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - appnet
+
   kafka:
+    # docs https://hub.docker.com/r/wurstmeister/kafka
     # docs https://hub.docker.com/r/bitnami/kafka
     # docs https://juejin.cn/post/6893410969611927566
-    image: 'bitnami/kafka:latest'
+    # docs https://www.jianshu.com/p/52a505354bbc
+    image: 'wurstmeister/kafka:latest'
+    expose:
+      - '9092'
     ports:
-      - '9092:9092'
       - '19092:19092'
     environment:
       - KAFKA_BROKER_ID=1
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:19092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://127.0.0.1:9092,EXTERNAL://external_host_address:19092
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181/kafka_cluster
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=INSIDE://kafka:9092,OUTSIDE://localhost:19092
+      - KAFKA_LISTENERS=INSIDE://:9092,OUTSIDE://:19092
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181/kafka_cluster
       - ALLOW_PLAINTEXT_LISTENER=yes # not recommended for production
     depends_on:
       - zookeeper
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    name: appnet
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16

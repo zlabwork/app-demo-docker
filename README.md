@@ -10,6 +10,7 @@ docker-compose -f docker-compose.yaml up -d
 ```bash
 docker logs app-web -f --tail 5
 docker-compose logs -f --tail 5
+docker-compose -f docker-compose.kafka.yaml logs -f --tail 5
 ```
 
 
