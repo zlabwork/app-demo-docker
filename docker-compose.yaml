@@ -21,7 +21,7 @@ services:
     image: php:8.1.12-fpm-alpine
     volumes:
       - .:/app
-    ports:
+    expose:
       - "9000"
     networks:
       - appnet

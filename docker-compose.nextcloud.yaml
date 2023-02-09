@@ -28,7 +28,7 @@ services:
     volumes:
       - ./schema:/docker-entrypoint-initdb.d
       - ./database:/var/lib/mysql
-    ports:
+    expose:
       - "3306"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
