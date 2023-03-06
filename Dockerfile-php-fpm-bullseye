@@ -9,3 +9,7 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-install -j$(nproc) pdo_pgsql pdo_mysql exif gd \
 	&& pecl install rdkafka \
 	&& docker-php-ext-enable rdkafka
+
+## SEE:
+# pecl install redis
+# echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini
