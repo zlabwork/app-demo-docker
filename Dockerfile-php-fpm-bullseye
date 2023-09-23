@@ -6,8 +6,9 @@ RUN apt-get update && apt-get install -y \
 		libpng-dev \
 		libpq-dev \
 		librdkafka-dev \
+		libicu-dev \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
-	&& docker-php-ext-install -j$(nproc) pdo_pgsql pdo_mysql mysqli exif gd zip \
+	&& docker-php-ext-install -j$(nproc) pdo_pgsql pdo_mysql mysqli intl exif gd zip \
 	&& pecl install rdkafka \
 	&& docker-php-ext-enable rdkafka
 
