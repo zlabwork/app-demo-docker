@@ -1,4 +1,5 @@
 FROM ubuntu:23.04
+WORKDIR /var/www
 RUN apt-get update \
     && apt-get install -y \
         net-tools \
@@ -7,9 +8,9 @@ RUN apt-get update \
     && apt-get install -y \
         redis \
         nginx \
-        postgresql \
-        mysql-server \
-    && apt-get install -y \ 
+        # postgresql \
+        # mysql-server \
+    && apt-get install -y \
         php8.1 \
         php8.1-fpm \
         php8.1-mysql \
@@ -26,7 +27,7 @@ RUN apt-get update \
 
 # @docs
 # @link https://hub.docker.com/_/ubuntu
-# 
+#
 # Install kafka module
 # apt-get install librdkafka-dev php8.1-dev php-pear
 # pecl install rdkafka
