@@ -23,7 +23,7 @@ indent_style = tab
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{json, html, xml, yaml, yml}]
+[*.{json,html,xml,yaml,yml}]
 indent_size = 2
 
 [.babelrc]
