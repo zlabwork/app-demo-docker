@@ -15,6 +15,7 @@ RUN apt-get update \
         php8.1-fpm \
         php8.1-mysql \
         php8.1-pgsql \
+        php8.1-mongodb \
         php8.1-mbstring \
         php8.1-zip \
         php8.1-xml \
@@ -23,7 +24,8 @@ RUN apt-get update \
         php8.1-bcmath \
         php8.1-gmp \
         php8.1-redis \
-        php8.1-intl
+        php8.1-intl \
+        php8.1-xdebug
 
 # @docs
 # @link https://hub.docker.com/_/ubuntu
