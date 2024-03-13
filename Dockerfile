@@ -4,7 +4,7 @@ RUN apt-get update \
     && apt-get install -y \
         net-tools \
         iputils-ping \
-        netcat-openbsd \
+        # netcat-openbsd \
     && apt-get install -y \
         redis \
         nginx \
