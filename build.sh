@@ -6,5 +6,5 @@ name="zlabwork/php-dev"
 tag=$(date "+%Y%m%d")-$(date "+%s")
 echo "$name:$tag"
 
-docker build -t "$name:$tag" -f Dockerfile .
+docker build -t "$name:$tag" -f Dockerfile-debian .
 # docker push "$name:$tag"

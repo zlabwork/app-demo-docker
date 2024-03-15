@@ -3,5 +3,5 @@
 Thumbs.db
 var/
 etc/
-/docs/docker/conf.d/
+/docs/nginx/conf.d/
 /public/
