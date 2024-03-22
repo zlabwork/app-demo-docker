@@ -6,8 +6,9 @@ DOCKER_NAME="dev"
 
 docker run --name $DOCKER_NAME \
     -itd \
-    -v ./www:/app \
     -v ./docs/nginx/conf.d:/etc/nginx/conf.d \
+    -v /var/data/www:/app \
+    -v /var/data/log:/var/log/nginx \
     -v /var/shared:/var/shared \
     -p 8080:8080 \
     $DOCKER_IMAGE
