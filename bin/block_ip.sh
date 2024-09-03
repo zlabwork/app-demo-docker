@@ -43,7 +43,7 @@ do
         mv tmp002.txt $blockList
 
         # 重启
-        nginx -s reload
+        /usr/local/bin/nginx -s reload
     fi
 
 done < $tmpFile
